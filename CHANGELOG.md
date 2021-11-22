@@ -1,3 +1,5 @@
-## 0.0.1
+## [0.1.0] gradie v0.1.0
 
-* TODO: Describe initial release.
+* Implemented Gradie
+* Created GradieContainer
+* Created GradieBorder
