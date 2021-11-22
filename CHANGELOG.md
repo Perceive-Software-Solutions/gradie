@@ -1,3 +1,7 @@
+## [0.1.2] gradie v0.1.2
+
+* Updated gradie container to display background surface color for gradie
+
 ## [0.1.1] gradie v0.1.1
 
 * Updated gradie border to contain background color and shadow

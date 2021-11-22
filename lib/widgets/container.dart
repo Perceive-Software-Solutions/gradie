@@ -26,7 +26,6 @@ class GradieContainer extends StatelessWidget {
     //Returns the combo stack
     return Stack(
       children: [
-        child ?? const SizedBox.expand(),
         // stack,
         CustomPaint(
           painter: _GradieContainerPainter(
@@ -35,6 +34,8 @@ class GradieContainer extends StatelessWidget {
           ),
           child: const SizedBox.expand(),
         ),
+
+        child ?? const SizedBox.expand(),
       ],
     );
   }
@@ -51,6 +52,13 @@ class _GradieContainerPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     
     RRect card = borderRadius.toRRect(Offset.zero & size);
+
+    if(gradie.surface != null){
+      Paint backgroundPaint = Paint()
+        ..color = gradie.surface!;
+
+      canvas.drawRRect(card, backgroundPaint);
+    }
 
     for (var gradient in gradie.gradients) {
       Paint paint = Paint()
