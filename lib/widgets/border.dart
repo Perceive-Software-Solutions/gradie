@@ -8,6 +8,12 @@ class GradieBorder extends StatelessWidget {
   ///Defaulted to surface
   final Gradie gradie;
 
+  ///Background color
+  final Color? background;
+
+  //Drop shadows
+  final List<BoxShadow>? boxShadow;
+
   //Container proxies
   final BorderRadius? borderRadius;
 
@@ -17,16 +23,28 @@ class GradieBorder extends StatelessWidget {
     this.child,
     required this.gradie, 
     this.borderRadius, 
+    this.background, 
+    this.boxShadow, 
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
 
-    //Returns the combo stack
+    //Returns the graide stack
     return Stack(
       children: [
-        child ?? const SizedBox.expand(),
-        // stack,
+
+        //background container
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: borderRadius,
+            color: background,
+            boxShadow: boxShadow
+          ),
+          child: const SizedBox.expand()
+        ),
+
+        // border gradie
         CustomPaint(
           painter: _GradieBorderPainter(
             gradie: gradie,
@@ -34,6 +52,10 @@ class GradieBorder extends StatelessWidget {
           ),
           child: const SizedBox.expand(),
         ),
+
+        //Child
+        if(child != null)
+          Positioned.fill(child: child!)
       ],
     );
   }
