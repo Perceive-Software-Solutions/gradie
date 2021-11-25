@@ -28,3 +28,15 @@ class Gradie{
 
 
 }
+
+//Extension to turn a gradient into a gradie
+extension GradieGradient on Gradient {
+
+  Gradie get gradie{
+    return Gradie(
+      gradients: [this],
+      surface: null
+    );
+  }
+
+}
