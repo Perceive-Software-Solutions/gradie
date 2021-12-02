@@ -35,22 +35,26 @@ class GradieBorder extends StatelessWidget {
       children: [
 
         //background container
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: borderRadius,
-            color: background,
-            boxShadow: boxShadow
+        Positioned.fill(
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: borderRadius,
+              color: background,
+              boxShadow: boxShadow
+            ),
+            child: const SizedBox.expand()
           ),
-          child: const SizedBox.expand()
         ),
 
         // border gradie
-        CustomPaint(
-          painter: _GradieBorderPainter(
-            gradie: gradie,
-            borderRadius: borderRadius ?? BorderRadius.circular(0),
+        Positioned.fill(
+          child: CustomPaint(
+            painter: _GradieBorderPainter(
+              gradie: gradie,
+              borderRadius: borderRadius ?? BorderRadius.circular(0),
+            ),
+            child: const SizedBox.expand(),
           ),
-          child: const SizedBox.expand(),
         ),
 
         //Child
