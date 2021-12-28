@@ -24,19 +24,12 @@ class GradieContainer extends StatelessWidget {
   Widget build(BuildContext context) {
 
     //Returns the combo stack
-    return Stack(
-      children: [
-        // stack,
-        CustomPaint(
-          painter: _GradieContainerPainter(
-            gradie: gradie,
-            borderRadius: borderRadius ?? BorderRadius.circular(0)
-          ),
-          child: const SizedBox.expand(),
-        ),
-
-        child ?? const SizedBox.expand(),
-      ],
+    return CustomPaint(
+      painter: _GradieContainerPainter(
+        gradie: gradie,
+        borderRadius: borderRadius ?? BorderRadius.circular(0)
+      ),
+      child: child,
     );
   }
 }

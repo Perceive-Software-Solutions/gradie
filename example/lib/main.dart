@@ -1,5 +1,6 @@
 import 'package:example/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:gradie/gradie.dart';
 
 import 'card.dart';
 
@@ -34,37 +35,33 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 
   Widget _content() {
-    return ElevatedCard(
-      reflective: false,
-      color: Constants.surface,
+    return ClipRRect(
       borderRadius: BorderRadius.circular(32),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(32),
-        child: Container(
-          color: Colors.red[100],
-          height: 300,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const ListTile(
-                title: Text('list'),
-                subtitle: Text('tile'),
+      child: Container(
+        color: Colors.red[100],
+        height: 300,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const ListTile(
+              title: Text('list'),
+              subtitle: Text('tile'),
+            ),
+            const Expanded(child: Center(child: Text('Content'),),),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Row(
+                children: const [
+                  Expanded(child: TextField(),),
+                  IconButton(onPressed: null, icon: Icon(Icons.send))
+                ],
               ),
-              const Expanded(child: Center(child: Text('Content'),),),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Row(
-                  children: const [
-                    Expanded(child: TextField(),),
-                    IconButton(onPressed: null, icon: Icon(Icons.send))
-                  ],
-                ),
-              )
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );
+    // return ;
   }
 
   @override
@@ -78,12 +75,22 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Center(
-          child: _content(),
-          // child: ListView.separated(
-          //   itemCount: 20,
-          //   separatorBuilder: (context, index) => Container(height: 8,),
-          //   itemBuilder: (context, index) => _content(),
-          // )
+          // child: _content(),
+          child: ListView.separated(
+            itemCount: 20,
+            separatorBuilder: (context, index) => Container(height: 8,),
+            // itemBuilder: (context, index) => GradieContainer(
+            //   gradie: Constants.reflection,
+            //   borderRadius: BorderRadius.circular(32),
+            //   child: _content()
+            // ),
+            itemBuilder: (context, index) => ElevatedCard(
+              reflective: true,
+              color: Colors.yellow,
+              borderRadius: BorderRadius.circular(32),
+              child: _content()
+            ),
+          )
         ),
       ),
     );

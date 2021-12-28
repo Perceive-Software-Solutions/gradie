@@ -1,3 +1,7 @@
+## [0.1.4] gradie v0.1.4
+
+* Ensured that the gradie is sized based off the child
+
 ## [0.1.3] gradie v0.1.3
 
 * Added extension on Gradient to transform into a simple gradie
