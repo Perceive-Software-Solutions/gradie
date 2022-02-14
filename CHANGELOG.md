@@ -1,3 +1,8 @@
+## [0.1.5]
+
+* Able to smooth the gradient border
+* Changed input to decoration for various types of containers
+
 ## [0.1.4] gradie v0.1.4
 
 * Ensured that the gradie is sized based off the child
