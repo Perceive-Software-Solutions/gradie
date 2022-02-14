@@ -69,25 +69,25 @@ class ElevatedCard extends StatelessWidget {
       child: GradieBorder(
         gradie: Constants.reflection,
         borderRadius: borderRadius,
-        background: color ?? Constants.surface,
-        boxShadow: [
-          BoxShadow(
-            color: Constants.shadow.withOpacity(0.14),
-            blurRadius: 1,
-            offset: Offset(1, 1),
-          ),
-          BoxShadow(
-            color: Constants.shadow.withOpacity(0.12),
-            blurRadius: 1,
-            spreadRadius: -1,
-            offset: Offset(2, 2),
-          ),
-          BoxShadow(
-            color: Constants.shadow.withOpacity(0.20),
-            blurRadius: 3,
-            offset: Offset(1, 1),
-          ),
-        ],
+        // background: color ?? Constants.surface,
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: Constants.shadow.withOpacity(0.14),
+        //     blurRadius: 1,
+        //     offset: Offset(1, 1),
+        //   ),
+        //   BoxShadow(
+        //     color: Constants.shadow.withOpacity(0.12),
+        //     blurRadius: 1,
+        //     spreadRadius: -1,
+        //     offset: Offset(2, 2),
+        //   ),
+        //   BoxShadow(
+        //     color: Constants.shadow.withOpacity(0.20),
+        //     blurRadius: 3,
+        //     offset: Offset(1, 1),
+        //   ),
+        // ],
         child: child,
       ),
     );

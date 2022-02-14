@@ -8,23 +8,22 @@ class GradieBorder extends StatelessWidget {
   ///Defaulted to surface
   final Gradie gradie;
 
-  ///Background color
-  final Color? background;
-
-  //Drop shadows
-  final List<BoxShadow>? boxShadow;
+  final Decoration? decoration;
 
   //Container proxies
   final BorderRadius? borderRadius;
+
+  // Smoothing radius
+  final double? smoothingRadius;
 
   
   const GradieBorder({
     Key? key,
     this.child,
-    required this.gradie, 
-    this.borderRadius, 
-    this.background, 
-    this.boxShadow, 
+    required this.gradie,
+    this.borderRadius,
+    this.smoothingRadius, 
+    this.decoration
   }) : super(key: key);
 
   @override
@@ -33,15 +32,12 @@ class GradieBorder extends StatelessWidget {
     //Returns the graide stack
     return Container(
       //background container
-      decoration: BoxDecoration(
-        borderRadius: borderRadius,
-        color: background,
-        boxShadow: boxShadow
-      ),
+      decoration: decoration,
       // border gradie
       child: CustomPaint(
         painter: _GradieBorderPainter(
           gradie: gradie,
+          smoothingRadius: smoothingRadius ?? 0.0,
           borderRadius: borderRadius ?? BorderRadius.circular(0),
         ),
         //Child
@@ -49,57 +45,121 @@ class GradieBorder extends StatelessWidget {
       ),
       // child: const SizedBox.expand()
     );
-
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-
-        //background container
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: borderRadius,
-            color: background,
-            boxShadow: boxShadow
-          ),
-          // child: const SizedBox.expand()
-        ),
-
-        // border gradie
-        CustomPaint(
-          painter: _GradieBorderPainter(
-            gradie: gradie,
-            borderRadius: borderRadius ?? BorderRadius.circular(0),
-          ),
-          // child: const SizedBox.expand(),
-        ),
-
-        //Child
-        if(child != null)
-          child!
-      ],
-    );
   }
 }
+
+/// Creates a [Path] inside the given [Rect].
+  Path toPath(Rect rect, BorderRadius borderRadius, double smoothingRadius) {
+    final width = rect.width;
+    final height = rect.height;
+
+    final result = Path();
+
+    final topLeft = SmoothRadius(
+      cornerRadius: borderRadius.topLeft.x,
+      cornerSmoothing: smoothingRadius,
+    );
+
+    final bottomLeft = SmoothRadius(
+      cornerRadius: borderRadius.bottomLeft.x,
+      cornerSmoothing: smoothingRadius
+    );
+
+    final topRight = SmoothRadius(
+      cornerRadius: borderRadius.topRight.x,
+      cornerSmoothing: smoothingRadius
+    );
+
+    final bottomRight = SmoothRadius(
+      cornerRadius: borderRadius.bottomRight.x,
+      cornerSmoothing: smoothingRadius
+    );
+
+    /// Calculating only if values are different
+    final processedTopLeft = ProccessedRadius(
+      topLeft,
+      width: width,
+      height: height,
+    );
+    final processedBottomLeft = topLeft == bottomLeft
+        ? processedTopLeft
+        : ProccessedRadius(
+            bottomLeft,
+            width: width,
+            height: height,
+          );
+    final processedBottomRight = bottomLeft == bottomRight
+        ? processedBottomLeft
+        : ProccessedRadius(
+            bottomRight,
+            width: width,
+            height: height,
+          );
+    final processedTopRight = topRight == bottomRight
+        ? processedBottomRight
+        : ProccessedRadius(
+            topRight,
+            width: width,
+            height: height,
+          );
+
+    result
+      ..addSmoothTopRight(processedTopRight, rect)
+      ..addSmoothBottomRight(processedBottomRight, rect)
+      ..addSmoothBottomLeft(processedBottomLeft, rect)
+      ..addSmoothTopLeft(processedTopLeft, rect);
+
+    return result.transform(
+      Matrix4.translationValues(rect.left, rect.top, 0).storage,
+    );
+  }
+
+@override
+  Path getOuterPath(Rect rect, BorderRadius borderRadius, double smoothingRadius, {TextDirection? textDirection}) {
+    final outerRect = rect;
+    final radius = borderRadius +
+      SmoothBorderRadius.all(
+        SmoothRadius(
+          cornerRadius: BorderSide.none.width,
+          cornerSmoothing: smoothingRadius,
+        )
+      );
+
+    if ([radius.bottomLeft, radius.bottomRight, radius.topLeft, radius.topRight]
+        .every((x) => (x as SmoothRadius).cornerSmoothing == 0.0)) {
+      return Path()..addRRect(radius.resolve(textDirection).toRRect(outerRect));
+    }
+
+    return toPath(outerRect, radius, smoothingRadius);
+  }
 
 class _GradieBorderPainter extends CustomPainter {
 
   final Gradie gradie;
   final BorderRadius borderRadius;
+  final double smoothingRadius;
 
-  _GradieBorderPainter({required this.gradie, this.borderRadius = BorderRadius.zero});
+  _GradieBorderPainter({required this.gradie, this.borderRadius = BorderRadius.zero, this.smoothingRadius = 0.0});
 
   @override
   void paint(Canvas canvas, Size size) {
     
-    RRect card = borderRadius.toRRect(Offset.zero & size);
+    final rect = Rect.fromLTWH(0, 0, size.width, size.height);
+
+    final outerPath = getOuterPath(
+      rect,
+      borderRadius,
+      smoothingRadius,
+      textDirection: TextDirection.ltr,
+    );
 
     for (var gradient in gradie.gradients) {
       Paint paint = Paint()
         ..style = PaintingStyle.stroke
         ..strokeWidth = 1.0
-        ..shader = gradient.createShader(card.outerRect);
+        ..shader = gradient.createShader(rect);
       
-      canvas.drawRRect(card, paint);
+      canvas.drawPath(outerPath, paint);
     }
 
   }

@@ -1,6 +1,10 @@
 library gradie;
 
+import 'package:figma_squircle/figma_squircle.dart';
 import 'package:flutter/material.dart';
+
+import 'package:gradie/process_border.dart';
+import 'package:gradie/smooth_path.dart';
 
 part 'widgets/container.dart';
 part 'widgets/border.dart';
