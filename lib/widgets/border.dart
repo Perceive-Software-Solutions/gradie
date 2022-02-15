@@ -38,7 +38,7 @@ class GradieBorder extends StatelessWidget {
         painter: _GradieBorderPainter(
           gradie: gradie,
           smoothingRadius: smoothingRadius ?? 0.0,
-          borderRadius: borderRadius ?? BorderRadius.circular(0),
+          borderRadius: borderRadius ?? SmoothBorderRadius.zero,
         ),
         //Child
         child: child,
