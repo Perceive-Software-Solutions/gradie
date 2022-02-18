@@ -25,7 +25,7 @@ class GradieContainer extends StatelessWidget {
 
     //Returns the combo stack
     return ClipPath(
-      clipper: _ClipSmoothPath(borderRadius: borderRadius ?? SmoothBorderRadius.zero),
+      clipper: borderRadius is SmoothBorderRadius ? _ClipSmoothPath(borderRadius: borderRadius ?? SmoothBorderRadius.zero) : null,
       child: CustomPaint(
         painter: _GradieContainerPainter(
           gradie: gradie,
