@@ -24,12 +24,15 @@ class GradieContainer extends StatelessWidget {
   Widget build(BuildContext context) {
 
     //Returns the combo stack
-    return CustomPaint(
-      painter: _GradieContainerPainter(
-        gradie: gradie,
-        borderRadius: borderRadius ?? BorderRadius.circular(0)
+    return ClipPath(
+      clipper: _ClipSmoothPath(borderRadius: borderRadius ?? SmoothBorderRadius.zero),
+      child: CustomPaint(
+        painter: _GradieContainerPainter(
+          gradie: gradie,
+          borderRadius: borderRadius ?? SmoothBorderRadius.zero
+        ),
+        child: child,
       ),
-      child: child,
     );
   }
 }
@@ -59,7 +62,6 @@ class _GradieContainerPainter extends CustomPainter {
       
       canvas.drawRRect(card, paint);
     }
-
   }
 
   @override
@@ -70,4 +72,31 @@ class _GradieContainerPainter extends CustomPainter {
     return false;
   }
 
+}
+
+class _ClipSmoothPath extends CustomClipper<Path> {
+
+  final BorderRadius borderRadius;
+
+  _ClipSmoothPath({this.borderRadius = BorderRadius.zero});
+  @override
+  Path getClip(Size size) {
+    final rect = Rect.fromLTWH(0, 0, size.width, size.height);
+    final outerPath = getOuterPath(
+      rect,
+      borderRadius,
+      0.6,
+      textDirection: TextDirection.ltr,
+    );
+    return outerPath;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
+    if(oldClipper is _ClipSmoothPath){
+      return oldClipper != this;
+    }
+    return false;
+  }
+  
 }

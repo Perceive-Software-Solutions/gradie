@@ -1,6 +1,4 @@
-import 'package:example/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:gradie/gradie.dart';
 
 import 'card.dart';
 
