@@ -1,3 +1,7 @@
+## [0.1.7]
+
+* Added smooth radius to gradie containers
+
 ## [0.1.5]
 
 * Able to smooth the gradient border
